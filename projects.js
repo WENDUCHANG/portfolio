@@ -7,3 +7,16 @@ window.PORTFOLIO_PROJECTS = [
   {id:'plant', title:'Future Plant', cn:'当城市越来越密集，植物将如何生长？', category:'digital', label:'INTERACTIVE DESIGN · VISUAL SYSTEM', short:'Imagining plant life in an increasingly compressed city.', description:'Starting with observations of urban development in Suzhou, Future Plant considers how the spaces available to plants change as cities become denser. Botanical forms are translated into graphic patterns and an interactive experience that imagines a flattened, compressed future.', captions:['Translating plant structures into graphic forms','Visual and interface development for the digital experience','Wireframes, site structure and final interface studies'], color:'#dededc'},
   {id:'dream', title:'Dream', cn:'给无法被量化的感受，一种形状', category:'graphic', label:'DATA VISUALISATION · VISUAL EXPERIMENT', short:'Translating an emotional diary into abstract form.', description:'Dream explores how personal emotions and dreams can become a visual record. Moving from emotional notes to colour, abstract blocks and spatial forms, the project builds an intuitive visual language for experiences that resist fixed labels and numerical charts.', captions:['Dream: an exploration of the quantified self','Emotional records translated into a system of colour and abstraction','A spatial visualisation of emotional intensity'], color:'#f1eee4'}
 ];
+
+window.PORTFOLIO_PROJECT_TEXT_ZH = {
+  nook: {title:'Nook / 温柔连接', label:'数字体验 · 视觉识别', short:'一种更安静的数字陪伴。', description:'Nook 通过个性化音乐、轻柔的情绪问候和虚拟陪伴，探索人与人工智能之间的情感关系。围绕“察觉 → 倾听 → 关怀”，项目思考技术如何帮助我们理解自己的情绪需求，也追问真实理解与被设计出来的关怀之间的边界。', captions:['界面探索：音乐、情绪与温柔的陪伴','Soft Connect 海报系统的发展过程','最终海报在日常公共空间中的呈现']},
+  letter: {title:'Letter Peel / 城市字迹', label:'实验字体 · 印刷', short:'由时间与城市共同塑造的字体语言。', description:'被撕下的海报、残留的贴纸和风化的标牌，成为实验字体的起点。Letter Peel 将容易被忽略的城市痕迹转译为带有层次、伤痕与记忆的字形，让逐渐消失的城市片段重新被看见。', captions:['将采集的城市痕迹转译为字形','海报实验与视觉语言的发展','最终印刷作品在城市环境中的呈现']},
+  earth: {title:'Radical Earth / 与自然成书', label:'出版物 · 材料实验', short:'重新审视出版背后的生态联系。', description:'项目探索出版所涉及的材料、资源与环境系统。废弃包装、再生纸张与植物蓝晒被转化为一本手工出版物，让消费、生长与转变留下的痕迹，成为书籍本身的一部分。', captions:['植物与废弃包装的蓝晒实验','手工出版物的结构与装帧探索','最终出版物：关于自然的材料记录']},
+  beauty: {title:'Beauty Selling Machine / 美丽售卖机', label:'思辨设计 · 数字体验', short:'美丽、消费，以及数据背后的隐形代价。', description:'通过一台思辨性的美丽售卖机及其数字界面，项目探索外貌追求与个人数据之间的交换关系。鲜明而刻意诱人的视觉系统，邀请人们重新思考：为了获得理想中的美丽，我们究竟交出了什么？', captions:['美丽售卖机的概念与视觉识别','思辨性美丽商城的界面设计','包装、售卖机与实体接触点的最终呈现']},
+  plant: {title:'Future Plant / 未来植物', label:'交互设计 · 视觉系统', short:'想象日益密集的城市中的植物生活。', description:'从对苏州城市发展的观察出发，Future Plant 思考城市密度不断增加时，植物的生长空间如何改变。植物形态被转译为图形纹样与交互体验，描绘一个被压缩、被扁平化的未来。', captions:['将植物结构转译为图形与字形','数字体验的视觉与界面发展','最终界面呈现、线框图与网站结构']},
+  dream: {title:'Dream / 梦的形状', label:'数据可视化 · 视觉实验', short:'将情绪日记转化为抽象形态。', description:'Dream 探索私人情绪与梦境如何成为可被感知的视觉记录。从情绪笔记到色彩、抽象色块与空间形态，项目为那些难以被固定标签和数字图表定义的感受，建立直觉性的视觉语言。', captions:['Dream：关于量化自我的探索','将情绪记录转译为色彩与抽象图形系统','情绪强度的空间可视化成品']}
+};
+
+window.PORTFOLIO_PROJECTS.forEach(project => {
+  project.slides = [3, 2, 1];
+});

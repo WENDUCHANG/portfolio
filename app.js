@@ -6,34 +6,67 @@
   const indexDialog = document.querySelector('#index-dialog');
   let activeProject = 0, activeSlide = 0;
   const el = (selector) => document.querySelector(selector);
+  let language = 'en';
+  try { language = localStorage.getItem('portfolio-language') || (navigator.language.startsWith('zh') ? 'zh' : 'en'); } catch {}
+  if (!['en', 'zh'].includes(language)) language = 'en';
+  const text = (key) => window.PORTFOLIO_LABELS[language][key];
+  const localizedProject = (index) => language === 'zh' ? {...projects[index], ...window.PORTFOLIO_PROJECT_TEXT_ZH[projects[index].id]} : projects[index];
 
-  for (const [i, project] of projects.entries()) {
+  function renderProjects() {
+  grid.replaceChildren();
+  el('#index-list').replaceChildren();
+  for (const [i, source] of projects.entries()) {
+    const project = localizedProject(i);
     const card = document.createElement('article');
     card.className = 'project-card';
     card.dataset.id = project.id;
     card.dataset.category = project.category;
     card.style.setProperty('--card-bg', project.color);
-    card.innerHTML = `<button type="button" aria-label="Explore ${project.title}"><div class="project-image"><span class="image-index">0${i + 1} / PROJECT</span><img src="assets/${project.id}-cover.webp" alt="${project.title} — selected design outcome" loading="lazy" width="800" height="620"><span class="image-action" aria-hidden="true">↗</span></div><div class="project-meta"><span>${project.label}</span><span>0${i + 1}</span></div><h3 class="project-title">${project.title}</h3><p class="project-summary">${project.short}</p></button>`;
+    card.innerHTML = `<button type="button" aria-label="${text('explore')} ${project.title}"><div class="project-image"><span class="image-index">0${i + 1} / ${text('project')}</span><span class="cover-edition" aria-hidden="true">YZ — 2022–2026</span><div class="cover-art"><img src="assets/${project.id}-cover.webp" alt="${project.title} — ${text('outcome')}" loading="lazy" width="800" height="620"></div><span class="cover-title" lang="en" aria-hidden="true">${source.title}</span><span class="image-action" aria-hidden="true">↗</span></div><div class="project-meta"><span>${project.label}</span><span>0${i + 1}</span></div><h3 class="project-title">${project.title}</h3><p class="project-summary">${project.short}</p></button>`;
     card.querySelector('button').addEventListener('click', () => openProject(i));
     grid.append(card);
 
     const row = document.createElement('button');
     row.type = 'button'; row.className = 'index-row';
-    row.innerHTML = `<span class="mono">0${i + 1}</span><span class="index-name">${project.title}</span><span class="mono index-category">${project.category.toUpperCase()}</span><span aria-hidden="true">↗</span>`;
+    row.innerHTML = `<span class="mono">0${i + 1}</span><span class="index-name">${project.title}</span><span class="mono index-category">${text(project.category)}</span><span aria-hidden="true">↗</span>`;
     row.addEventListener('click', () => { indexDialog.close(); openProject(i); });
     el('#index-list').append(row);
   }
+  applyFilter();
+  }
+
+  function applyFilter() {
+    const category = el('[data-filter][aria-pressed="true"]').dataset.filter;
+    let count = 0;
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.hidden = category !== 'all' && card.dataset.category !== category;
+      if (!card.hidden) count++;
+    });
+    el('#project-count').textContent = `${count} ${text(count === 1 ? 'singular' : 'plural')}`;
+  }
+
+  function setLanguage(nextLanguage) {
+    language = nextLanguage;
+    try { localStorage.setItem('portfolio-language', language); } catch {}
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+    const column = language === 'zh' ? 2 : 1;
+    window.PORTFOLIO_COPY.forEach(entry => { el(entry[0]).innerHTML = entry[column]; });
+    window.PORTFOLIO_ARIA.forEach(entry => { el(entry[0]).setAttribute('aria-label', entry[column]); });
+    document.querySelectorAll('[data-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === language)));
+    document.title = text('title');
+    document.querySelectorAll('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]').forEach(meta => meta.content = text('description'));
+    document.querySelectorAll('meta[property="og:title"], meta[name="twitter:title"]').forEach(meta => meta.content = text('title'));
+    el('.about-cn').lang = document.documentElement.lang;
+    renderProjects();
+    if (projectDialog.open) renderProjectDetails();
+    document.dispatchEvent(new Event('portfolio-language-change'));
+  }
+  document.querySelectorAll('[data-language]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
 
   document.querySelectorAll('[data-filter]').forEach(button => {
     button.addEventListener('click', () => {
-      const category = button.dataset.filter;
       document.querySelectorAll('[data-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-      let count = 0;
-      document.querySelectorAll('.project-card').forEach(card => {
-        card.hidden = category !== 'all' && card.dataset.category !== category;
-        if (!card.hidden) count++;
-      });
-      el('#project-count').textContent = `${count} PROJECT${count !== 1 ? 'S' : ''}`;
+      applyFilter();
     });
   });
 
@@ -43,30 +76,37 @@
   }
   function openProject(index) {
     activeProject = index; activeSlide = 0;
-    const p = projects[index];
+    renderProjectDetails(); showDialog(projectDialog); projectDialog.scrollTop = 0;
+  }
+  function renderProjectDetails() {
+    const p = localizedProject(activeProject);
     el('#dialog-file').textContent = `${p.id}.project`;
     el('#dialog-category').textContent = p.label;
     el('#dialog-title').textContent = p.title;
-    el('#dialog-subtitle').textContent = p.cn;
+    el('#dialog-subtitle').textContent = language === 'zh' ? p.cn : p.short;
+    el('#dialog-subtitle').lang = document.documentElement.lang;
     el('#dialog-description').textContent = p.description;
-    el('#project-position').textContent = `PROJECT 0${index + 1} / 0${projects.length}`;
+    el('#project-position').textContent = `${text('project')} 0${activeProject + 1} / 0${projects.length}`;
     el('#case-thumbnails').replaceChildren();
-    p.captions.forEach((caption, i) => {
+    p.slides.forEach((imageNumber, i) => {
+      const caption = p.captions[imageNumber - 1];
       const button = document.createElement('button');
       button.type = 'button';
-      button.setAttribute('aria-label', `View image ${i + 1}: ${caption}`);
-      button.innerHTML = `<img src="assets/${p.id}-${i + 1}.webp" alt="" loading="lazy">`;
+      button.setAttribute('aria-label', `${text('image')} ${i + 1}: ${caption}`);
+      button.innerHTML = `<img src="assets/${p.id}-${imageNumber}.webp" alt="" loading="lazy">`;
       button.addEventListener('click', () => { activeSlide = i; updateSlide(); });
       el('#case-thumbnails').append(button);
     });
-    updateSlide(); showDialog(projectDialog); projectDialog.scrollTop = 0;
+    updateSlide();
   }
   function updateSlide() {
-    const p = projects[activeProject];
+    const p = localizedProject(activeProject);
+    const imageNumber = p.slides[activeSlide];
+    const caption = p.captions[imageNumber - 1];
     const image = el('#case-image');
-    image.src = `assets/${p.id}-${activeSlide + 1}.webp`;
-    image.alt = `${p.title}: ${p.captions[activeSlide]}`;
-    el('#case-caption').textContent = p.captions[activeSlide];
+    image.src = `assets/${p.id}-${imageNumber}.webp`;
+    image.alt = `${p.title}: ${caption}`;
+    el('#case-caption').textContent = caption;
     el('#slide-status').textContent = `0${activeSlide + 1} / 0${p.captions.length}`;
     el('#prev-slide').disabled = activeSlide === 0;
     el('#next-slide').disabled = activeSlide === p.captions.length - 1;
@@ -92,11 +132,12 @@
     if (event.key === 'ArrowRight' && activeSlide < projects[activeProject].captions.length - 1) { event.preventDefault(); activeSlide++; updateSlide(); }
   });
   el('#year').textContent = new Date().getFullYear();
+  setLanguage(language);
 
   // A point-cloud torus: original, browser-rendered artwork with no external dependency.
   const canvas = el('#particle-art');
   const ctx = canvas.getContext('2d');
-  if (!ctx) { el('#art-caption').textContent = 'A STUDY IN CONNECTION'; el('#motion-toggle').hidden = true; return; }
+  if (!ctx) { el('#motion-toggle').hidden = true; return; }
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let paused = reducedMotion.matches, visible = true, width = 0, height = 0;
   let time = 0, previousTime = 0, frame = null, pointerX = 0, pointerY = 0;
@@ -144,8 +185,8 @@
   }
   function syncMotion() {
     el('#motion-toggle').setAttribute('aria-pressed', String(paused));
-    el('#motion-toggle').textContent = paused ? '▷ PLAY' : 'Ⅱ PAUSE';
-    el('#motion-toggle').setAttribute('aria-label', paused ? 'Play particle animation' : 'Pause particle animation');
+    el('#motion-toggle').textContent = text(paused ? 'play' : 'pause');
+    el('#motion-toggle').setAttribute('aria-label', text(paused ? 'playLabel' : 'pauseLabel'));
     if (frame !== null) cancelAnimationFrame(frame);
     frame = null; previousTime = performance.now();
     if (!paused && visible && !document.hidden) frame = requestAnimationFrame(tick);
@@ -160,6 +201,7 @@
   el('#motion-toggle').addEventListener('click', () => { paused = !paused; syncMotion(); });
   reducedMotion.addEventListener('change', event => { paused = event.matches; syncMotion(); });
   document.addEventListener('visibilitychange', syncMotion);
+  document.addEventListener('portfolio-language-change', syncMotion);
   new ResizeObserver(resize).observe(canvas);
   new IntersectionObserver(entries => { visible = entries[0].isIntersecting; syncMotion(); }).observe(canvas);
   resize(); syncMotion();
