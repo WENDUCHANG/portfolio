@@ -1,15 +1,11 @@
 (() => {
   'use strict';
-  const projects = Array.isArray(window.PORTFOLIO_PROJECTS) ? window.PORTFOLIO_PROJECTS : [];
+  const projects = window.PORTFOLIO_PROJECTS;
   const grid = document.querySelector('#project-grid');
   const projectDialog = document.querySelector('#project-dialog');
   const indexDialog = document.querySelector('#index-dialog');
   let activeProject = 0, activeSlide = 0;
   const el = (selector) => document.querySelector(selector);
-
-  if (!projects.length) {
-    grid.innerHTML = '<p class="load-error">项目数据没有加载出来。多半是 <code>projects.js</code> 里的语法错误，常见原因：少了逗号、引号没有闭合、括号不成对。</p>';
-  }
 
   for (const [i, project] of projects.entries()) {
     const card = document.createElement('article');
@@ -27,14 +23,6 @@
     row.addEventListener('click', () => { indexDialog.close(); openProject(i); });
     el('#index-list').append(row);
   }
-
-  // Keep the counts in the nav, toolbar and index in sync with the data file.
-  const total = String(projects.length).padStart(2, '0');
-  el('#project-count').textContent = `${total} PROJECTS`;
-  const navCount = document.querySelector('.nav nav a[href="#work"] sup');
-  if (navCount) navCount.textContent = total;
-  const indexNote = document.querySelector('.index-note');
-  if (indexNote) indexNote.textContent = `${total} PROJECTS / CLICK A TITLE TO EXPLORE`;
 
   document.querySelectorAll('[data-filter]').forEach(button => {
     button.addEventListener('click', () => {

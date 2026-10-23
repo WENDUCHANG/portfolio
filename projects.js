@@ -7,14 +7,3 @@ window.PORTFOLIO_PROJECTS = [
   {id:'plant', title:'Future Plant', cn:'当城市越来越密集，植物将如何生长？', category:'digital', label:'INTERACTIVE DESIGN · VISUAL SYSTEM', short:'Imagining plant life in an increasingly compressed city.', description:'Starting with observations of urban development in Suzhou, Future Plant considers how the spaces available to plants change as cities become denser. Botanical forms are translated into graphic patterns and an interactive experience that imagines a flattened, compressed future.', captions:['Translating plant structures into graphic forms','Visual and interface development for the digital experience','Wireframes, site structure and final interface studies'], color:'#dededc'},
   {id:'dream', title:'Dream', cn:'给无法被量化的感受，一种形状', category:'graphic', label:'DATA VISUALISATION · VISUAL EXPERIMENT', short:'Translating an emotional diary into abstract form.', description:'Dream explores how personal emotions and dreams can become a visual record. Moving from emotional notes to colour, abstract blocks and spatial forms, the project builds an intuitive visual language for experiences that resist fixed labels and numerical charts.', captions:['Dream: an exploration of the quantified self','Emotional records translated into a system of colour and abstraction','A spatial visualisation of emotional intensity'], color:'#f1eee4'}
 ];
-
-/*
-  ── 新增一个项目：复制下面这段，粘贴到上面最后一行后面（上一行结尾要加英文逗号）──
-
-  {id:'my-project', title:'Project Name', cn:'一句中文副标题', category:'graphic', label:'TYPEFACE · PRINT', short:'卡片上的一句话简介。', description:'详情页的项目介绍，两到三句话。', captions:['过程图 1 说明','过程图 2 说明','过程图 3 说明'], color:'#eeeeea'}
-
-  · id 用英文小写，图片命名成 my-project-cover.webp、my-project-1.webp、-2、-3 放进 assets/
-  · category 只能填 digital / graphic / material，对应首页的三个筛选
-  · 项目之间要有英文逗号，最后一项后面不要加逗号
-  · 文字只能用英文引号 ' 或 "，不能用中文引号
-*/
