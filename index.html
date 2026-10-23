@@ -28,7 +28,7 @@
   <header class="nav">
     <a class="wordmark" href="#top" aria-label="Yujie Zheng, home"><span class="brand-symbol" aria-hidden="true">✳</span> YZ<span class="wordmark-suffix"> / DESIGN ARCHIVE</span></a>
     <nav aria-label="Main navigation">
-      <a href="#work">WORK <sup>06</sup></a>
+      <a href="#work">WORK <sup>07</sup></a>
       <a href="#about">ABOUT</a>
       <button id="index-open" type="button">INDEX <span aria-hidden="true">↗</span></button>
     </nav>
@@ -63,15 +63,10 @@
       <div class="section-top mono"><span>[01 — SELECTED WORK]</span><span>RESEARCH → EXPERIMENT → FORM</span></div>
       <div class="section-heading"><h2 id="work-heading">A few things<br>I've been making<span class="green-star" aria-hidden="true">✳</span></h2><p>From a quiet digital companion<br>to the traces left on a city wall.<br><span>观察、实验，再让想法成形。</span></p></div>
       <div class="work-toolbar">
-        <div class="filters" role="group" aria-label="Filter projects">
-          <button type="button" data-filter="all" aria-pressed="true">ALL <sup>06</sup></button>
-          <button type="button" data-filter="digital" aria-pressed="false">DIGITAL</button>
-          <button type="button" data-filter="graphic" aria-pressed="false">GRAPHIC</button>
-          <button type="button" data-filter="material" aria-pressed="false">MATERIAL</button>
-        </div>
-        <span id="project-count" class="mono" aria-live="polite">6 PROJECTS</span>
+        <span class="mono">04 DISCIPLINES</span>
+        <span id="project-count" class="mono">07 PROJECTS</span>
       </div>
-      <div id="project-grid" class="project-grid"></div>
+      <div id="project-archive" class="project-archive"></div>
       <noscript><p>Enable JavaScript to explore the project gallery and interactive artwork.</p></noscript>
       <div class="archive-line mono"><span>EVERY PROJECT STARTS WITH A QUESTION.</span><button type="button" id="archive-open">VIEW PROJECT INDEX <span aria-hidden="true">↗</span></button></div>
     </section>
@@ -82,12 +77,30 @@
         <div class="about-copy"><p class="about-lead">I’m interested in what<br>we tend to overlook.</p><p>Emotions that don’t have a shape. Letters worn away by time. The quiet relationship between people and technology. My work starts with these small observations, and gives them a visual language.</p><p>Across typography, publications, digital interfaces and material experiments, I use research and making to look at familiar things a little differently.</p><p class="about-cn" lang="zh-CN">从日常观察出发，用视觉语言表达情绪、记忆，以及人与环境之间不易察觉的联系。</p><div class="practice-list"><span class="mono">MY PRACTICE</span><ul><li>Visual communication <span>↗</span></li><li>Digital experiences <span>↗</span></li><li>Editorial & typography <span>↗</span></li><li>Material exploration <span>↗</span></li></ul></div></div>
       </div>
     </section>
-    <footer><div class="footer-top mono"><span>END OF PAGE. START OF SOMETHING ELSE.</span><a href="#top">BACK TO TOP ↑</a></div><p class="footer-title">Thanks for<br><span>looking.</span><span class="footer-arrow" aria-hidden="true">↗</span></p><div class="footer-bottom mono"><span>© <span id="year">2026</span> YUJIE ZHENG</span><span>MADE OF QUESTIONS & CURIOSITY.</span><span>PORTFOLIO / 01</span></div></footer>
   </main>
+  <footer><div class="footer-inner"><div class="footer-top mono"><span>END OF PAGE. START OF SOMETHING ELSE.</span><a href="#top">BACK TO TOP ↑</a></div><p class="footer-title">Thanks for<br><span>looking.</span><span class="footer-arrow" aria-hidden="true">↗</span></p><div class="footer-bottom mono"><span>© <span id="year">2026</span> YUJIE ZHENG</span><span>MADE OF QUESTIONS & CURIOSITY.</span><span>PORTFOLIO / 01</span></div></div></footer>
   <dialog id="project-dialog" aria-labelledby="dialog-title">
     <div class="dialog-bar window-bar"><span class="window-box" aria-hidden="true"></span><span class="window-lines"></span><span id="dialog-file">project.view</span><span class="window-lines"></span><button class="dialog-close" type="button" aria-label="Close project">✕</button></div>
-    <div class="dialog-content"><div class="dialog-intro"><div><p id="dialog-category" class="eyebrow"></p><h2 id="dialog-title"></h2><p id="dialog-subtitle" lang="zh-CN"></p></div><p id="dialog-description"></p></div><div class="case-controls mono"><span>SELECTED PROCESS & OUTCOME</span><span id="slide-status" aria-live="polite"></span><div><button type="button" id="prev-slide" aria-label="Previous project image">←</button><button type="button" id="next-slide" aria-label="Next project image">→</button></div></div><figure class="case-figure"><img id="case-image" alt=""><figcaption id="case-caption" class="mono"></figcaption></figure><div id="case-thumbnails" class="case-thumbnails" role="group" aria-label="Choose project image"></div><div class="case-bottom mono"><span id="project-position"></span><button type="button" id="next-project">NEXT PROJECT ↗</button></div></div>
+    <div class="dialog-content">
+      <div class="dialog-intro"><div><p id="dialog-category" class="eyebrow"></p><h2 id="dialog-title"></h2><p id="dialog-subtitle" lang="zh-CN"></p></div><p id="dialog-description"></p></div>
+      <div class="dialog-meta">
+        <div id="dialog-tools-block"><span class="meta-label mono">SOFTWARE</span><p id="dialog-tools" class="meta-value"></p></div>
+        <div><span class="meta-label mono">DISCIPLINE</span><p id="dialog-tags" class="meta-value"></p></div>
+      </div>
+      <figure class="outcome">
+        <div class="figure-head mono"><span>OUTCOME</span><span>CLICK THE IMAGE TO ENLARGE ↗</span></div>
+        <button type="button" class="zoom-target" id="outcome-button"><img id="outcome-image" alt=""></button>
+        <figcaption id="outcome-caption" class="mono"></figcaption>
+      </figure>
+      <div id="film-slot"></div>
+      <div class="process-block">
+        <div class="figure-head mono"><span id="process-range">PROCESS 01 — 03</span><span>SELECTED DEVELOPMENT</span></div>
+        <div id="process-list" class="process-list"></div>
+      </div>
+      <div class="case-bottom mono"><span id="project-position"></span><button type="button" id="next-project">NEXT PROJECT ↗</button></div>
+    </div>
   </dialog>
-  <dialog id="index-dialog" aria-labelledby="index-title"><div class="window-bar"><span class="window-box" aria-hidden="true"></span><span class="window-lines"></span><span>directory.txt</span><span class="window-lines"></span><button class="dialog-close" type="button" aria-label="Close project index">✕</button></div><div class="index-content"><p class="eyebrow">A DIRECTORY OF IDEAS</p><h2 id="index-title">Project index<span class="period">.</span></h2><div id="index-list"></div><p class="mono index-note">06 PROJECTS / CLICK A TITLE TO EXPLORE</p></div></dialog>
+  <dialog id="zoom-dialog" aria-label="Enlarged project image"><button type="button" class="zoom-close" aria-label="Close enlarged image">✕</button><img id="zoom-image" alt=""></dialog>
+  <dialog id="index-dialog" aria-labelledby="index-title"><div class="window-bar"><span class="window-box" aria-hidden="true"></span><span class="window-lines"></span><span>directory.txt</span><span class="window-lines"></span><button class="dialog-close" type="button" aria-label="Close project index">✕</button></div><div class="index-content"><p class="eyebrow">A DIRECTORY OF IDEAS</p><h2 id="index-title">Project index<span class="period">.</span></h2><div id="index-list"></div><p class="mono index-note">07 PROJECTS / CLICK A TITLE TO EXPLORE</p></div></dialog>
 </body>
 </html>
