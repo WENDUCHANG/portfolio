@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const projects = window.PORTFOLIO_PROJECTS;
+  const projects = Array.isArray(window.PORTFOLIO_PROJECTS) ? window.PORTFOLIO_PROJECTS : [];
   const groups = [
     { id: 'software', cn: '软件设计', en: 'SOFTWARE & INTERFACE', note: 'Interactive work, interfaces and digital systems' },
     { id: 'poster', cn: '海报', en: 'POSTER & PRINT', note: 'Printed matter, poster systems and image-making' },
@@ -16,6 +16,10 @@
   const groupOf = (id) => groups.find(group => group.id === id);
   const indexOf = (id) => projects.findIndex(project => project.id === id);
   const pad = (n) => String(n).padStart(2, '0');
+
+  if (!projects.length) {
+    archive.innerHTML = '<p class="load-error">项目数据没有加载出来。多半是 <code>projects.js</code> 里的语法错误，常见原因：少了逗号、引号没有闭合、括号不成对。</p>';
+  }
 
   for (const [g, group] of groups.entries()) {
     const primary = projects.filter(project => project.primary === group.id);

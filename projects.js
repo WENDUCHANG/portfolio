@@ -73,3 +73,26 @@ window.PORTFOLIO_PROJECTS = [
     color: '#e5e9e4', tools: [], video: null
   }
 ];
+
+/*
+  ── 新增一个项目：复制下面这段，粘贴到上面最后一个项目后面（原来的 } 后面加英文逗号）──
+
+  {
+    id: 'my-project',                 // 英文小写，图片文件名要用这个前缀
+    title: 'Project Name',
+    cn: '一句中文副标题',
+    primary: 'software',              // software / poster / type / object 四选一
+    also: [],                         // 同时归到哪个分区，可留空数组
+    label: 'TYPEFACE · PRINT',
+    short: '卡片上的一句话简介。',
+    description: '详情页的项目介绍，两到三句话。',
+    outcome: '成品图下面的说明',
+    process: ['过程图 1 说明', '过程图 2 说明', '过程图 3 说明'],
+    color: '#eeeeea',
+    tools: [],                        // 例如 ['Illustrator', 'InDesign']
+    video: null                       // 例如 'https://www.youtube-nocookie.com/embed/VIDEO_ID'
+  },
+
+  注意：项目之间要有英文逗号，最后一项后面不要加逗号，
+  文字只能用英文引号 ' 或 "，不能用中文引号。
+*/
