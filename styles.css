@@ -296,6 +296,18 @@ html[lang="zh-CN"] .footer-title { font-size: clamp(42px, 6vw, 78px); line-heigh
   .lettering-strip-label { font-size: 8px; }
   .lettering-options > button { flex-basis: calc((100% - 8px) / 2); min-width: 126px; }
   .lettering-options img { height: 44px; }
+  .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
+  .project-card { grid-column: 1 / -1; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) { grid-column: auto; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .project-image { aspect-ratio: 1.08; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .cover-art { inset: 36px 12px 44px; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .cover-edition { display: none; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .image-index { top: 13px; left: 12px; font-size: 7px; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .cover-title { left: 12px; right: 32px; bottom: 13px; font-size: 9px; padding-top: 8px; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .image-action { right: 9px; bottom: 10px; min-width: 20px; height: 20px; font-size: 16px; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .project-title { font-size: 16px; line-height: 1.45; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .project-meta { font-size: 7px; gap: 8px; }
+  .project-card:is([data-id="emotion"], [data-id="plant"]) .project-summary { font-size: 10px; line-height: 1.7; }
   .project-card[data-id="type"] .project-image { aspect-ratio: 1.45; }
   .project-card[data-id="type"] .cover-art { inset: 52px 20px 62px; }
   .project-card[data-id="type"] .cover-art img { object-fit: contain; }
