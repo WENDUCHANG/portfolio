@@ -16,13 +16,13 @@
 | `cn` | 中文副标题，详情页标题下面那行 |
 | `short` | 卡片上的一句话简介 |
 | `description` | 详情页右侧的项目介绍 |
-| `outcome` | 成品图下面那行说明 |
-| `process` | 过程图的说明，按顺序对应 `项目名-1/2/3.webp` |
-| `label` | 卡片上的分类标签，如 `TYPEFACE · PUBLICATION · PACKAGING` |
-| `primary` | 归属分区：`software` / `poster` / `type` / `object` |
-| `also` | 同时归到其他分区，填分区名数组，没有就留 `[]` |
-| `tools` | 使用的软件，例如 `['Illustrator', 'InDesign']`，留空则不显示 |
-| `video` | 视频链接（YouTube embed 地址），没有就写 `null` |
+| `captions` | 三张过程图的说明，按顺序对应 `项目名-1/2/3.webp` |
+| `label` | 卡片上的分类标签，如 `EXPERIMENTAL TYPOGRAPHY · PRINT` |
+| `category` | 筛选分类，只能填 `digital` / `graphic` / `material` |
+| `color` | 卡片背景色 |
+| `id` | 英文小写，同时是图片文件名的前缀，**不要改** |
+
+首页的项目数量会自动跟着数据变，不用手动改数字。
 
 改完在页面下方填写提交说明（比如 "update Resonance copy"），点 **Commit changes** 即可。
 
@@ -34,9 +34,9 @@
 
 ### 加一个新项目
 
-1. 在 `assets/` 上传 4 张图，例如 `my-project-cover.webp`、`my-project-1.webp` 等
-2. 打开 `projects.js`，复制文件末尾注释里的模板，粘贴到数组里面（最后一个项目后面）
-3. 把 `id` 改成 `my-project`（和图片文件名前缀一致），填好文字和 `primary`
+1. 在 `assets/` 上传 4 张图，例如 `my-project-cover.webp`、`my-project-1.webp`、`-2`、`-3`
+2. 打开 `projects.js`，复制文件末尾注释里的模板，粘贴到数组里面（最后一个项目后面，上一行要补一个英文逗号）
+3. 把 `id` 改成 `my-project`（和图片文件名前缀一致），填好文字和 `category`
 4. 提交
 
 ### 预览
@@ -54,14 +54,14 @@
 - 数组最后一项后面不要加逗号
 - 不要删掉 `window.PORTFOLIO_PROJECTS = [` 和最后的 `];`
 
-如果改坏了，页面会显示一条提示而不会整页空白。最稳妥的恢复方式：在仓库的 **Commits** 里找到上一个正常版本，打开改坏的文件，点 **History** 旁边的 **Revert**。
+如果改坏了，页面会显示一条提示而不会整页空白。最稳妥的恢复方式：在仓库的 **Commits** 里找到上一个正常版本，让维护者回滚。
 
 ## 文件说明
 
 - `index.html` — 页面结构、首页文案、About、meta 标签
 - `projects.js` — 所有项目数据（最常改）
 - `styles.css` — 颜色、字体、排版、手机端布局
-- `app.js` — 分区渲染、详情弹窗、图片放大、粒子动画
-- `assets/` — 7 个项目封面 + 20 张过程图 + 社交分享图
+- `app.js` — 筛选、详情弹窗、图片切换、粒子动画
+- `assets/` — 6 个项目封面 + 18 张过程图 + 社交分享图
 
 一般只改 `projects.js` 和 `assets/` 就够了，`index.html`、`styles.css`、`app.js` 属于版式和交互，改动前最好先沟通。

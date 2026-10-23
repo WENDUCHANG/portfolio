@@ -1,167 +1,97 @@
 (() => {
   'use strict';
   const projects = Array.isArray(window.PORTFOLIO_PROJECTS) ? window.PORTFOLIO_PROJECTS : [];
-  const groups = [
-    { id: 'software', cn: '软件设计', en: 'SOFTWARE & INTERFACE', note: 'Interactive work, interfaces and digital systems' },
-    { id: 'poster', cn: '海报', en: 'POSTER & PRINT', note: 'Printed matter, poster systems and image-making' },
-    { id: 'type', cn: '字体', en: 'TYPEFACE & LETTERING', note: 'Letterforms, typefaces and typographic systems' },
-    { id: 'object', cn: '实体', en: 'PUBLICATION & OBJECT', note: 'Books, packaging and material experiments' },
-  ];
-  const archive = document.querySelector('#project-archive');
+  const grid = document.querySelector('#project-grid');
   const projectDialog = document.querySelector('#project-dialog');
   const indexDialog = document.querySelector('#index-dialog');
-  const zoomDialog = document.querySelector('#zoom-dialog');
-  let activeProject = 0;
+  let activeProject = 0, activeSlide = 0;
   const el = (selector) => document.querySelector(selector);
-  const groupOf = (id) => groups.find(group => group.id === id);
-  const indexOf = (id) => projects.findIndex(project => project.id === id);
-  const pad = (n) => String(n).padStart(2, '0');
 
   if (!projects.length) {
-    archive.innerHTML = '<p class="load-error">项目数据没有加载出来。多半是 <code>projects.js</code> 里的语法错误，常见原因：少了逗号、引号没有闭合、括号不成对。</p>';
+    grid.innerHTML = '<p class="load-error">项目数据没有加载出来。多半是 <code>projects.js</code> 里的语法错误，常见原因：少了逗号、引号没有闭合、括号不成对。</p>';
   }
-
-  for (const [g, group] of groups.entries()) {
-    const primary = projects.filter(project => project.primary === group.id);
-    const crossRefs = projects.filter(project => project.also.includes(group.id));
-    if (!primary.length && !crossRefs.length) continue;
-
-    const section = document.createElement('section');
-    section.className = 'discipline';
-    section.id = `discipline-${group.id}`;
-    section.innerHTML = `
-      <div class="discipline-head">
-        <div class="discipline-title">
-          <span class="mono discipline-index">[0${g + 1}]</span>
-          <h3>${group.cn}<span>${group.en}</span></h3>
-        </div>
-        <div class="discipline-aside">
-          <p class="discipline-note">${group.note}</p>
-          <span class="mono discipline-count">${pad(primary.length)} PROJECT${primary.length === 1 ? '' : 'S'}</span>
-        </div>
-      </div>`;
-
-    const grid = document.createElement('div');
-    grid.className = 'project-grid';
-    grid.dataset.count = String(primary.length);
-    for (const project of primary) {
-      const i = indexOf(project.id);
-      const card = document.createElement('article');
-      card.className = 'project-card';
-      card.dataset.id = project.id;
-      card.style.setProperty('--card-bg', project.color);
-      card.innerHTML = `<button type="button" aria-label="Explore ${project.title}"><div class="project-image"><span class="image-index">${pad(i + 1)} / PROJECT</span><img src="assets/${project.id}-cover.webp" alt="${project.title} — final outcome" loading="lazy" width="800" height="620"><span class="image-action" aria-hidden="true">↗</span></div><div class="project-text"><div class="project-meta"><span>${project.label}</span><span>${pad(i + 1)}</span></div><h3 class="project-title">${project.title}</h3><p class="project-summary">${project.short}</p></div></button>`;
-      card.querySelector('button').addEventListener('click', () => openProject(i));
-      grid.append(card);
-    }
-    section.append(grid);
-
-    if (crossRefs.length) {
-      const list = document.createElement('ul');
-      list.className = 'also-list';
-      list.setAttribute('aria-label', `Also filed under ${group.en}`);
-      for (const project of crossRefs) {
-        const i = indexOf(project.id);
-        const item = document.createElement('li');
-        item.innerHTML = `<span class="mono">ALSO</span><button type="button">${project.title}<span aria-hidden="true">↗</span></button><span class="mono also-meta">${project.label}</span>`;
-        item.querySelector('button').addEventListener('click', () => openProject(i));
-        list.append(item);
-      }
-      section.append(list);
-    }
-
-    archive.append(section);
-  }
-
-  el('#project-count').textContent = `${pad(projects.length)} PROJECTS`;
 
   for (const [i, project] of projects.entries()) {
+    const card = document.createElement('article');
+    card.className = 'project-card';
+    card.dataset.id = project.id;
+    card.dataset.category = project.category;
+    card.style.setProperty('--card-bg', project.color);
+    card.innerHTML = `<button type="button" aria-label="Explore ${project.title}"><div class="project-image"><span class="image-index">0${i + 1} / PROJECT</span><img src="assets/${project.id}-cover.webp" alt="${project.title} — selected design outcome" loading="lazy" width="800" height="620"><span class="image-action" aria-hidden="true">↗</span></div><div class="project-meta"><span>${project.label}</span><span>0${i + 1}</span></div><h3 class="project-title">${project.title}</h3><p class="project-summary">${project.short}</p></button>`;
+    card.querySelector('button').addEventListener('click', () => openProject(i));
+    grid.append(card);
+
     const row = document.createElement('button');
     row.type = 'button'; row.className = 'index-row';
-    row.innerHTML = `<span class="mono">${pad(i + 1)}</span><span class="index-name">${project.title}</span><span class="mono index-category">${groupOf(project.primary).en}</span><span aria-hidden="true">↗</span>`;
+    row.innerHTML = `<span class="mono">0${i + 1}</span><span class="index-name">${project.title}</span><span class="mono index-category">${project.category.toUpperCase()}</span><span aria-hidden="true">↗</span>`;
     row.addEventListener('click', () => { indexDialog.close(); openProject(i); });
     el('#index-list').append(row);
   }
+
+  // Keep the counts in the nav, toolbar and index in sync with the data file.
+  const total = String(projects.length).padStart(2, '0');
+  el('#project-count').textContent = `${total} PROJECTS`;
+  const navCount = document.querySelector('.nav nav a[href="#work"] sup');
+  if (navCount) navCount.textContent = total;
+  const indexNote = document.querySelector('.index-note');
+  if (indexNote) indexNote.textContent = `${total} PROJECTS / CLICK A TITLE TO EXPLORE`;
+
+  document.querySelectorAll('[data-filter]').forEach(button => {
+    button.addEventListener('click', () => {
+      const category = button.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+      let count = 0;
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.hidden = category !== 'all' && card.dataset.category !== category;
+        if (!card.hidden) count++;
+      });
+      el('#project-count').textContent = `${count} PROJECT${count !== 1 ? 'S' : ''}`;
+    });
+  });
 
   function showDialog(dialog) {
     if (!dialog.open) dialog.showModal();
     document.body.classList.add('modal-open');
   }
-
-  function openZoom(src, alt) {
-    el('#zoom-image').src = src;
-    el('#zoom-image').alt = alt;
-    if (!zoomDialog.open) zoomDialog.showModal();
-    document.body.classList.add('modal-open');
-  }
-
-  function renderFilm(project) {
-    const slot = el('#film-slot');
-    slot.replaceChildren();
-    if (!project.video) return;
-    const figure = document.createElement('figure');
-    figure.className = 'film';
-    figure.innerHTML = `<div class="figure-head mono"><span>FILM</span><span>CLICK TO PLAY</span></div><button type="button" class="film-facade"><img src="assets/${project.id}-cover.webp" alt=""><span class="film-play" aria-hidden="true">▶</span></button>`;
-    figure.querySelector('button').addEventListener('click', () => {
-      const frame = document.createElement('iframe');
-      frame.src = project.video;
-      frame.title = `${project.title} — film`;
-      frame.allow = 'autoplay; encrypted-media; picture-in-picture';
-      frame.setAttribute('allowfullscreen', '');
-      figure.replaceChildren(frame);
-    });
-    slot.append(figure);
-  }
-
   function openProject(index) {
-    activeProject = index;
+    activeProject = index; activeSlide = 0;
     const p = projects[index];
     el('#dialog-file').textContent = `${p.id}.project`;
     el('#dialog-category').textContent = p.label;
     el('#dialog-title').textContent = p.title;
     el('#dialog-subtitle').textContent = p.cn;
     el('#dialog-description').textContent = p.description;
-    el('#project-position').textContent = `PROJECT ${pad(index + 1)} / ${pad(projects.length)}`;
-
-    el('#dialog-tags').textContent = [p.primary, ...p.also].map(id => groupOf(id).en).join(' · ');
-    const toolsBlock = el('#dialog-tools-block');
-    if (p.tools && p.tools.length) {
-      el('#dialog-tools').textContent = p.tools.join(', ');
-      toolsBlock.hidden = false;
-    } else {
-      el('#dialog-tools').textContent = '';
-      toolsBlock.hidden = true;
-    }
-
-    const outcomeSrc = `assets/${p.id}-cover.webp`;
-    el('#outcome-image').src = outcomeSrc;
-    el('#outcome-image').alt = `${p.title} — final outcome`;
-    el('#outcome-caption').textContent = p.outcome;
-    el('#outcome-button').onclick = () => openZoom(outcomeSrc, `${p.title} — final outcome`);
-
-    const list = el('#process-list');
-    list.replaceChildren();
-    el('#process-range').textContent = `PROCESS 01 — ${pad(p.process.length)}`;
-    p.process.forEach((caption, i) => {
-      const src = `assets/${p.id}-${i + 1}.webp`;
-      const figure = document.createElement('figure');
-      figure.className = 'process-item';
-      figure.innerHTML = `<button type="button" class="zoom-target"><img src="${src}" alt="${p.title}: ${caption}" loading="lazy"></button><figcaption class="mono"><span>${pad(i + 1)}</span>${caption}</figcaption>`;
-      figure.querySelector('button').addEventListener('click', () => openZoom(src, `${p.title}: ${caption}`));
-      list.append(figure);
+    el('#project-position').textContent = `PROJECT 0${index + 1} / 0${projects.length}`;
+    el('#case-thumbnails').replaceChildren();
+    p.captions.forEach((caption, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', `View image ${i + 1}: ${caption}`);
+      button.innerHTML = `<img src="assets/${p.id}-${i + 1}.webp" alt="" loading="lazy">`;
+      button.addEventListener('click', () => { activeSlide = i; updateSlide(); });
+      el('#case-thumbnails').append(button);
     });
-
-    renderFilm(p);
-    showDialog(projectDialog);
-    projectDialog.scrollTop = 0;
+    updateSlide(); showDialog(projectDialog); projectDialog.scrollTop = 0;
   }
-
+  function updateSlide() {
+    const p = projects[activeProject];
+    const image = el('#case-image');
+    image.src = `assets/${p.id}-${activeSlide + 1}.webp`;
+    image.alt = `${p.title}: ${p.captions[activeSlide]}`;
+    el('#case-caption').textContent = p.captions[activeSlide];
+    el('#slide-status').textContent = `0${activeSlide + 1} / 0${p.captions.length}`;
+    el('#prev-slide').disabled = activeSlide === 0;
+    el('#next-slide').disabled = activeSlide === p.captions.length - 1;
+    el('#case-thumbnails').querySelectorAll('button').forEach((button, i) => button.setAttribute('aria-pressed', String(i === activeSlide)));
+  }
+  el('#prev-slide').addEventListener('click', () => { if (activeSlide > 0) { activeSlide--; updateSlide(); } });
+  el('#next-slide').addEventListener('click', () => { if (activeSlide < projects[activeProject].captions.length - 1) { activeSlide++; updateSlide(); } });
   el('#next-project').addEventListener('click', () => openProject((activeProject + 1) % projects.length));
   [el('#index-open'), el('#archive-open')].forEach(button => button.addEventListener('click', () => showDialog(indexDialog)));
   [projectDialog, indexDialog].forEach(dialog => {
     dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
     dialog.addEventListener('close', () => {
-      if (!projectDialog.open && !indexDialog.open && !zoomDialog.open) document.body.classList.remove('modal-open');
+      if (!projectDialog.open && !indexDialog.open) document.body.classList.remove('modal-open');
     });
     dialog.addEventListener('click', event => {
       if (event.target !== dialog) return;
@@ -169,9 +99,9 @@
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
     });
   });
-  zoomDialog.addEventListener('click', () => zoomDialog.close());
-  zoomDialog.addEventListener('close', () => {
-    if (!projectDialog.open && !indexDialog.open) document.body.classList.remove('modal-open');
+  projectDialog.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' && activeSlide > 0) { event.preventDefault(); activeSlide--; updateSlide(); }
+    if (event.key === 'ArrowRight' && activeSlide < projects[activeProject].captions.length - 1) { event.preventDefault(); activeSlide++; updateSlide(); }
   });
   el('#year').textContent = new Date().getFullYear();
 
